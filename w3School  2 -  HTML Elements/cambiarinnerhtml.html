@@ -1,0 +1,28 @@
+<!-- Cuando hagas click en el parrafo que cambie -->
+
+<!DOCTYPE html>
+<html>
+    <body>
+
+        <p id="demo">Click on me!</p> 
+
+        <script>
+            
+            // Al cargar la ventana añadimos la propiedad "onclick" al elemento con id "demo"
+             window.onload = function() {
+
+                 document.getElementById ("demo").onclick = cambiar;
+
+             }
+
+            // Funcion cambiar para cambiar el innerHTML
+            function cambiar() {
+
+            document.getElementById("demo").innerHTML = "Good Job!"
+
+            }
+
+        </script>
+
+    </body>
+</html>

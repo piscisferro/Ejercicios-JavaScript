@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html lang="">
+    <head>
+        <meta charset="UTF-8">
+        <title>Titulo de la pagina</title>
+        
+        <script>
+        
+            function mostrar(elem) {
+                
+                var longitud = elem.value.length;
+                document.getElementById("numero" + elem.id).innerHTML=longitud;
+            }
+        
+        </script>
+        
+        
+    </head>
+    
+    <body>
+        
+        Nombre: <input type="text" id="nombre" onkeyup="mostrar(this)">
+        <span id="numeronombre">0</span>
+        <br>
+        Apellidos: <input type="text" id="apellidos" onkeyup="mostrar(this)">
+        <span id="numeroapellidos">0</span>
+
+
+    </body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE HTML>
+<html lang="">
+    <head>
+        <meta charset="UTF-8">
+        <title>Cuadraditos600x600</title>
+        
+        <style>
+        
+            #contenedor {
+             
+                width: 600px;
+                height: 600px;
+                margin: auto; 
+                background-color: aqua;
+                position: relative;
+            }
+            
+            #crear {
+             
+                display: block;
+                margin: auto auto 10px auto;
+                
+            }
+            
+        
+        </style>
+        
+        <script>
+        
+        
+            window.onload = function () {
+                
+                document.getElementById("crear").onclick = crear;
+                             
+            }
+            
+            function crear () {
+             
+                var padre = document.getElementById("contenedor");
+                
+                var nuevaCapa = document.createElement ("div");
+                
+                
+                // Posiciones Aleatorias para Top y Bottom 
+                
+                var aleatorioGeneral = Math.floor((Math.random() * 2) + 1); // Para Top o Bottom
+                var posicionAleatoria = Math.floor((Math.random() * 550) + 1); // Para la posicion
+                
+                console.log (aleatorioGeneral);
+                console.log (posicionAleatoria);
+                
+                
+                // Switch para Top o Bottom
+                switch (aleatorioGeneral) {
+                        
+                    case 1: 
+                        nuevaCapa.style.top = posicionAleatoria + "px";
+                        break;
+                    case 2: 
+                        nuevaCapa.style.bottom = posicionAleatoria + "px";
+                        break;
+                } 
+                
+                
+                // Posiciones Aleatorias Left y Right
+                
+                var aleatorioGeneral2 = Math.floor((Math.random() * 2) + 1); // Para Left y Right
+                posicionAleatoria = Math.floor((Math.random() * 550) + 1); // Para la posicion
+                
+                
+                // Switch para Left y Right
+                switch (aleatorioGeneral2) {
+                        
+                    case 1: 
+                        nuevaCapa.style.left = posicionAleatoria + "px";
+                        break;
+                    case 2: 
+                        nuevaCapa.style.right = posicionAleatoria + "px";
+                        break;
+                }
+                
+                // Aleatorio para el color:
+                
+                var r = Math.floor(Math.random() * 255);
+                var g = Math.floor(Math.random() * 255);
+                var b = Math.floor(Math.random() * 255);
+                
+                nuevaCapa.style.backgroundColor = "rgb(" + r + "," + g + "," + b + ")";
+                
+                // Otros Atributos para el Elemento
+                
+                nuevaCapa.onclick = borrar;
+                nuevaCapa.style.position = "absolute";
+                nuevaCapa.style.width = 50 + "px";
+                nuevaCapa.style.height = 50 + "px";
+                
+                
+                
+                // Creamos Elemento
+                
+                padre.appendChild(nuevaCapa);
+                
+            }
+            
+            function borrar() {
+                
+                this.parentNode.removeChild(this);
+                
+            }
+        
+        
+        </script>
+        
+        
+        
+        
+        
+    </head>
+    
+    <body>
+    
+        <button id="crear">Crear 1 cuadrado</button>
+    
+        <div id="contenedor">
+            
+        </div>
+
+
+    </body>
+</html>

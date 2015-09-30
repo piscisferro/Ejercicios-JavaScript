@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <body>
+
+        <div id="div1">
+            <p id="p1">This is a paragraph.</p>
+            <p id="p2">This is another paragraph.</p>
+        </div>
+        
+        <button id="boton" onclick="add()">Añade parrafo!</button>
+
+        <script>
+            
+            function add() {
+            
+                // Creamos el elemento
+                var newP = document.createElement("p");
+
+                // Con innerHTML aplicamos texto al parrafo creado
+                newP.innerHTML = "New text!";
+
+                // Asignamos variables a elementos del documento
+                var element = document.getElementById("div1");
+                var child = document.getElementById("p1");
+
+                // El metodo insertBefore(elemento a introducir, elemento del que queremos que este por delante)
+                element.insertBefore(newP, child);
+                
+            }
+            
+        </script>
+
+    </body>
+</html>

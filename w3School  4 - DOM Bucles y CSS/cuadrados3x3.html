@@ -1,0 +1,109 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Cuadrados</title>
+        
+        <style>
+            
+            
+            #contenedor {
+                
+                width: 200px;
+                height: 200px;
+                margin: 0 auto;
+                
+            }
+            
+            #contenedor div {
+                
+                width: 30%;
+                height: 30%;
+                float: left;
+                border: 1px solid black;
+            }
+            
+            #boton {
+                
+                display: block;
+                margin: 10px auto auto auto;
+                
+            }
+            
+            #crear {
+                
+                display: block;
+                margin: auto;
+                
+            }
+        
+            
+        
+        </style>
+        
+        <script>
+        
+            window.onload = function () {
+             
+                document.getElementById("boton").onclick=rellenar;
+                document.getElementById("crear").onclick=crear;
+                
+            }
+            
+            function rellenar() {
+             
+               var capashijas = document.querySelectorAll("#contenedor div");
+                 
+                for (i = 0; i < capashijas.length; i++) {
+                 
+                    capashijas[i].innerHTML= i + 1;
+                    capashijas[i].style.backgroundColor = (i % 2 == 0)?"black":"white";
+                    capashijas[i].style.color = (i % 2 == 0)?"white":"black";
+                    capashijas[i].onclick= borrar;
+                    
+                }
+                
+            }
+            
+            function crear() {
+             
+                var padre = document.getElementById("contenedor");
+                var capashijas = document.querySelectorAll("#contenedor div");
+                
+                if (capashijas.length < 9) {
+                
+                    for (i = (9 - capashijas.length); i > 0; i--) {
+
+                        var div = document.createElement("div");                    
+                        padre.appendChild(div);
+                    }
+                }
+                
+                
+                
+            }
+            
+            function borrar() {
+             
+                this.parentNode.removeChild(this);
+                
+                
+            }
+            
+            
+        </script>
+        
+    </head>
+    
+    <body>
+    
+    <div id="contenedor">
+    </div>
+    
+    <button id= "crear">Crear</button>
+    <button id="boton">Rellenar</button>
+    
+
+
+    </body>
+</html>

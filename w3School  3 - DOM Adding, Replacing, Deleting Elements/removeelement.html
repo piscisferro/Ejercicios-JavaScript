@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <body>
+
+        <div id="div1">
+            <p id="p1">This is a paragraph.</p>
+            <p id="p2">This is another paragraph.</p>
+        </div>
+        
+        <button onclick="quitar()">Borrar parrafo</button>
+
+        <script>
+        
+        function quitar() {
+            //Para remover un hijo hay que saber quien es el padre
+
+            // Asignamos el elemento padre a una variable (comodidad) 
+            var parent = document.getElementById("div1");
+
+            // Asignamos el elemento hijo a una variable (comodidad)
+            var child = document.getElementById("p1");
+
+            // Para remover un hijo hay que saber quien es el padre
+            parent.removeChild(child);
+            }
+        </script>
+
+    </body>
+</html>

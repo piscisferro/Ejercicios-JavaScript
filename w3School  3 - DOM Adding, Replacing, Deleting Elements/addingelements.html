@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <body>
+
+        <div id="div1">
+            <p id="p1">This is a paragraph.</p>
+            <p id="p2">This is another paragraph.</p>
+        </div>
+        
+        <button id="boton" onclick="add()">Añade parrafo!</button>
+
+        <script>
+            
+            function add() {
+                
+                //Crea el elemento parrafo
+                var newP = document.createElement("p");
+                
+                // Crea el nodo "texto" para el parrafo
+                var node = document.createTextNode("This is new.");
+                
+                newP.appendChild(node); // Se añade el nodo texto al parrafo como hijo
+                
+                var parent = document.getElementById("div1"); // Metemos el div en una variable (comodidad).
+                parent.appendChild(newP); // Añade el elemento parrafo anteriormente creado como hijo del div
+            }
+        </script>
+
+    </body>
+</html>

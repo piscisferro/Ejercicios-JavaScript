@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html lang="">
+    <head>
+        <meta charset="UTF-8">
+        <title>Titulo de la pagina</title>
+        
+        <script>
+        
+            window.onload = function() {
+             
+                document.getElementById("boton").onclick=mostrar;
+                
+            }
+            
+            function mostrar() {
+                var elemsp = document.getElementsByTagName("p");
+                var longitud = elemsp.length;
+                for (i=0; i < longitud; i++) {
+                    document.getElementById("capas").innerHTML += elemsp[i].innerHTML + "<br>";
+                }
+                
+            }
+            
+        </script>
+    
+    <body>
+
+        <p>Hello world!</p>
+        
+        <p>parrafo1</p>
+        <p>parrafo2</p>
+        <p>parrafo3</p>
+        <p>parrafo4</p>
+        <p>parrafo5</p>
+        <p>parrafo6</p>
+        
+        <button id="boton">Click me!</button>
+        <hr>
+        <div id="capas"></div>
+    </body>
+</html>

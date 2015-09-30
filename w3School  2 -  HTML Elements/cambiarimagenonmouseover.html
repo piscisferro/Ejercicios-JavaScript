@@ -1,0 +1,33 @@
+<!-- Cuando hagas mouseover en el parrafo que cambie -->
+
+<!DOCTYPE html>
+<html>
+    <body>
+
+        Mouse over me!!!
+        <br>
+        <img id="image" src="images/smiley.gif" width="304" height="228">
+
+        <script>
+            
+        // Espera a que cargue el documento para añadir las propiedades al elemento con id "image"
+        window.onload = document.getElementById("image").onmouseover = cambiar;
+        window.onload = document.getElementById("image").onmouseout = cambiar;
+            
+        
+        function cambiar() {
+         
+            // Metemos el src de la imagen en una variable (comodidad)
+            var x = document.getElementById("image").src;
+            
+            // Forma guay de hacer un if else
+            x = (x.match("smiley.gif"))?"images/landscape.jpg":"images/smiley.gif";
+            
+            document.getElementById("image").src = x;
+        }
+            
+            
+        </script>
+
+    </body>
+</html>
