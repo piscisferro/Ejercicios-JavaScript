@@ -11,14 +11,14 @@
                 width: 600px;
                 height: 600px;
                 margin: auto; 
-                background-color: aqua;
+                border: 1px solid black;
                 position: relative;
             }
             
-            #crear {
-             
-                display: block;
+            #botones {
+                
                 margin: auto auto 10px auto;
+                text-align: center;
                 
             }
             
@@ -27,12 +27,22 @@
         
         <script>
         
-        
+            /////////////////////////////////////////////////////////////////////
+            // Funcion window.onload
+            /////////////////////////////////////////////////////////////////////
+            
             window.onload = function () {
                 
                 document.getElementById("crear").onclick = crear;
+                document.getElementById("reset").onclick = reset;
                              
-            }
+                             
+            } // Fin window.onload //////////////////////////////////////////////
+            
+            
+            /////////////////////////////////////////////////////////////////////
+            // Funcion para crear cuadraditos
+            /////////////////////////////////////////////////////////////////////
             
             function crear () {
              
@@ -41,7 +51,7 @@
                 var nuevaCapa = document.createElement ("div");
                 
                 
-                // Posiciones Aleatorias para Top y Bottom 
+                // Posiciones Aleatorias para Top y Bottom ////////////////////
                 
                 var aleatorioGeneral = Math.floor((Math.random() * 2) + 1); // Para Top o Bottom
                 var posicionAleatoria = Math.floor((Math.random() * 550) + 1); // Para la posicion
@@ -50,7 +60,7 @@
                 console.log (posicionAleatoria);
                 
                 
-                // Switch para Top o Bottom
+                // Switch para Top o Bottom ///////////////////////////////////
                 switch (aleatorioGeneral) {
                         
                     case 1: 
@@ -62,13 +72,13 @@
                 } 
                 
                 
-                // Posiciones Aleatorias Left y Right
+                // Posiciones Aleatorias Left y Right /////////////////////////
                 
                 var aleatorioGeneral2 = Math.floor((Math.random() * 2) + 1); // Para Left y Right
                 posicionAleatoria = Math.floor((Math.random() * 550) + 1); // Para la posicion
                 
                 
-                // Switch para Left y Right
+                // Switch para Left y Right ///////////////////////////////////
                 switch (aleatorioGeneral2) {
                         
                     case 1: 
@@ -79,7 +89,7 @@
                         break;
                 }
                 
-                // Aleatorio para el color:
+                // Aleatorio para el color: ///////////////////////////////////
                 
                 var r = Math.floor(Math.random() * 255);
                 var g = Math.floor(Math.random() * 255);
@@ -87,7 +97,8 @@
                 
                 nuevaCapa.style.backgroundColor = "rgb(" + r + "," + g + "," + b + ")";
                 
-                // Otros Atributos para el Elemento
+                
+                // Otros Atributos para el Elemento ///////////////////////////
                 
                 nuevaCapa.onclick = borrar;
                 nuevaCapa.style.position = "absolute";
@@ -96,34 +107,54 @@
                 
                 
                 
-                // Creamos Elemento
-                
+                // Le asignamos el elemento creado al padre. //////////////////
                 padre.appendChild(nuevaCapa);
                 
-            }
+            } // Fin funcion crear /////////////////////////////////////////////
+            
+            
+            
+            ///////////////////////////////////////////////////////////////////
+            // Funcion para borrar cuando clickeamos encima de un cuadradito.    
+            ///////////////////////////////////////////////////////////////////
             
             function borrar() {
                 
                 this.parentNode.removeChild(this);
                 
-            }
+            } // Fin funcion borrar ///////////////////////////////////////////
+            
+            
+            
+            ///////////////////////////////////////////////////////////////////
+            // Funcion para resetear el contenedor.
+            ///////////////////////////////////////////////////////////////////
+            
+            function reset() {
+             
+                var contenedor = document.getElementById("contenedor");
+                
+                while (contenedor.firstChild) {
+                    contenedor.removeChild(contenedor.firstChild);
+                }
+            } // Fin funcion reset ///////////////////////////////////////////
+            
         
         
         </script>
         
-        
-        
-        
-        
     </head>
     
     <body>
+       
+     <div id="botones">
+         <button id="crear">Crear 1 cuadrado</button>
+         <button id="reset">Reset</button>
+     </div>
     
-        <button id="crear">Crear 1 cuadrado</button>
-    
-        <div id="contenedor">
+     <div id="contenedor">
             
-        </div>
+    </div>
 
 
     </body>

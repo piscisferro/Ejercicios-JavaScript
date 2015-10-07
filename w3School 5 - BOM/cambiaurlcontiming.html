@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html lang="">
+    <head>
+        <meta charset="UTF-8">
+        <title>cambia URL</title>
+        
+        <script>
+        
+            var cuenta = 5;
+            
+            window.onload = function () {
+                
+                // Empieza la cuenta atras al pulsar el boton
+                document.getElementById("cambiarurl").onclick = contador;
+                
+                
+                    
+                // al cargar escribe en el parrafo la url actual.
+                document.getElementById("urlactual").innerHTML = window.location.href;
+                
+            }
+            
+            
+            function  contador() {
+             
+                cuenta--;                
+                if (cuenta < 0) {
+                 
+                    cambiar();
+                    return;
+                }
+                
+                document.getElementById("contador").innerHTML = cuenta;
+                
+                var intervalo = setTimeout(contador, 1000);
+                
+                // Para la cuenta atras
+                document.getElementById("stop").onclick = window.clearTimeout(intervalo);
+                
+            }
+            
+            function cambiar() {
+                
+                window.location.href = "https://www.google.es";
+            }
+        
+        
+        </script>
+    </head>
+    
+    <body>
+
+        <button id="cambiarurl">Cambiar URL</button>
+        <button id="stop">Stop!</button>
+        
+        <p id="contador">5</p>
+        <p id="urlactual"></p>
+
+    </body>
+</html>
