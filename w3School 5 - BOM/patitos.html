@@ -1,0 +1,161 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Patitos</title>
+		<link rel="icon" type="image/png" href="images/patito.png"/>
+    </head>
+    
+    <style>
+        
+        #contenedor {
+         
+            width: auto;
+            height: auto;
+            position: relative;
+            
+        }
+        
+        #puntuacion {
+            
+            width: 600px;
+            height: 150px;
+            
+        }
+        
+        #agua {
+            
+            background: linear-gradient(rgba(255,255,255,1) 0%, rgba(150,150,255,1) 30%, rgba(100,100,255,1) 70%, rgba(0,0,255,1) 100%);
+            width: 630px;
+            height: 150px;
+            
+        }
+        
+        #corredorDeLaMuerte {
+         
+            width: 600px;
+            height: 50px;
+            top: 15px;
+            position: relative;
+            
+        }
+        
+        .patito {
+            
+            background-image: url('images/patito.png');
+            background-size:50px 50px;
+            width: 50px;
+            height: 50px;
+            position: absolute;
+            
+            
+        }
+        
+        
+    </style>
+    
+    <script>
+        
+        var patitosAsesinados = 0;
+        var patitosLibres = 0;
+        var contadorPatitos = 0;
+        var libre = 0;
+        var asesinados = 0;
+    
+        window.onload = function () {
+         
+            // Intervalo para crear patitos indefinidamente
+            var intervalo = setInterval(crearPato, 1500);
+            
+        }
+        
+        function crearPato () {
+            
+            // Metemos el nuevo elemento creado en una variable
+            var nuevoPatito = document.createElement ("div");
+            
+            // Cogemos al futuro padre del elemento y lo metemos en variable (comodidad)
+            var padre = document.getElementById("corredorDeLaMuerte");
+            
+            // Le damos la clase para el CSS
+            nuevoPatito.className = "patito"; 
+            
+            // Le damos la funcionalidad de hacer click
+            nuevoPatito.setAttribute("onclick", "dispara(this)");
+            
+            // Y le damos una ID basado n un contador de patitos creados (id autoincrementada)
+            nuevoPatito.id = "pato" + contadorPatitos;
+            
+            // Aqui nace el nuevo patito
+            padre.appendChild(nuevoPatito);
+            
+            // Y aqui lo mandamos a nadar
+            moverPatito(nuevoPatito.id);
+            
+            // Suma uno al contador de patitos nacidos.
+            contadorPatitos++;
+            
+        }
+        
+        function moverPatito(patoId) {
+            
+            // Metemos al patito como elemento en una variable (comodidad)
+            var patitoActual = document.getElementById(patoId);
+              
+            // Movemos el patito cogiendo su posicion actual con el offset y sumandole los pixeles deseados
+            patitoActual.style.left = patitoActual.offsetLeft + 15 + "px";
+            
+            // Si el patito se sale del cuadrado de juego, felicidades, ha escapado.
+            if (patitoActual.offsetLeft < 600) {
+                
+                // Relanza la funcion actual para seguir moviendo al patito
+                setTimeout("moverPatito('" + patoId + "')", 100);
+                
+            } else { 
+                
+                // Si ha escapado, sumamos al contador de patitos liberados
+                libre++;
+                
+                // Y metemos ese contador en el HTML mediante span
+                document.getElementById("patitosLiberados").innerHTML = libre;
+                
+                // Y lo borramos de la web.
+                patitoActual.parentNode.removeChild(patitoActual); 
+                
+            }
+            
+        }
+        
+        function dispara(patito) {
+            
+            // Matamos al patito de manera lenta y dolorosa
+            patito.parentNode.removeChild(patito);
+            
+            // Sumamos 1 a nuestro contador de trofeos
+            asesinados++;
+            
+            // Eliminamos al patito de este cruel y divertido mundo
+            document.getElementById("patitosAsesinados").innerHTML = asesinados;
+        }
+        
+        
+        
+    </script>
+    
+    <body>
+        <div id="contenedor">
+            
+            <div id="puntuacion">
+                <p>Patitos Asesinados Fria y Cruelmente: <span id="patitosAsesinados">0</span></p>
+                <p>Patitos Que Han Logrado Escapar De Tu Cruel y Gratuita Masacre: <span id="patitosLiberados">0</span></p>
+            </div>
+            
+            <div id="corredorDeLaMuerte"></div>
+            
+            <div id="agua"></div>
+            
+        </div>
+
+
+    </body>
+</html>
