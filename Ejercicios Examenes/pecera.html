@@ -138,7 +138,7 @@
                 nuevoPez.className = "pececito";
                 
                 // Asignamos Id
-                nuevoPez.id = "Pez" + contadorPeces;
+                nuevoPez.id = "Pez: " + contadorPeces;
                 
                 // Incrementamos el contador
                 contadorPeces++;
@@ -240,7 +240,7 @@
             function seleccionarPez (pezActual) {
                 
                 // Metemos en la variable global SeleccionarPez la id del pez seleciconado
-                pezSeleccion = pezActual.id;
+                pezSeleccionado = pezActual.id;
                 
                 // Actualizamos la informacion del Pez en la UI
                 document.getElementById("pez").innerHTML = pezActual.id;
@@ -250,19 +250,19 @@
             
             
             // Funcion para la seleccion de la comida
-            function selecionComida (comida) {
+            function seleccionComida (comida) {
                 
                 // Si hemos seleccionado algun pez..
-                if (pezSeleccion != undefined) {
+                if (pezSeleccionado != undefined) {
                     
                     // Capturamos el pez que teniamos seleccionado
-                    pezActual = document.getElementById(pezSeleccion);
+                    pezActual = document.getElementById(pezSeleccionado);
                     
                     // Le sumamos una comida al pez
                     pezActual.value++;
                     
                     // Borramos la comida
-                    borrar(this);
+                    borrar(comida);
                     
                     // Actualizamos
                     document.getElementById("comida").innerHTML = pezActual.value;
@@ -287,7 +287,7 @@
             // Funcion de borrar elementos
             function borrar(elemento) {
     
-                elemento.parentNode.removechild(elemento);
+                elemento.parentNode.removeChild(elemento);
 
             }
 
