@@ -1,0 +1,315 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Pecera</title>
+        <style>
+            
+            #botones {
+                
+                margin: auto;
+                text-align: center;
+                
+            }
+            
+            #UI {
+             
+                margin: auto;
+                text-align: center;
+                
+            }
+            
+            #contenedor {
+             
+                width: 700px;
+                height: 500px;
+                border: 1px solid blue;
+                background-color: white;
+                overflow: hidden;
+                position: relative;
+                margin: auto;
+                
+                
+            }
+            
+            #agua {
+                
+                width: 700px;
+                height: 470px;
+                position: relative;
+                top: 500px;
+                background-color: lightblue;
+                z-index: 1;
+            }
+            
+            .pececito {
+             
+                width: 50px;
+                height: 50px;
+                background-size: 50px 50px;
+                position: absolute;
+                
+            }
+            
+            .comida {
+                
+                width: 25px;
+                height: 25px;
+                border-radius: 100%;
+                position: absolute;
+                z-index: 2;
+                
+            }
+            
+            
+        </style>
+        <script>
+            
+            // Cogemos los botones para luego meterlos en variables (comodidad)
+            var botonLlenar;
+            var botonPez;
+            var botonComida;
+            
+            // Contador de peces y comida para la ID autoincrementable
+            var contadorPeces = 0;
+            var contadorComida = 0;
+            
+            // Variable global para la seleccion del pez
+            var pezSeleccionado;
+            
+            // Windows onload
+            window.onload = function inicializar(){
+                
+                // Asignamos el onclick al boton llenar con la funcion Llenar
+                botonLlenar = document.getElementById("botonLlenar");
+                botonLlenar.setAttribute("onclick", "Llenar()");
+                botonLlenar.disabled = false;
+                
+                // Asignamos el onclick al boton Pez con la funcion crear y lo desactivamos
+                botonPez = document.getElementById("botonPeces");
+                botonPez.setAttribute("onclick", "crearPez()");
+                botonPez.disabled = true;
+                
+                // Asignamos el onclick al boton Comida con la funcion crearComida y lo desactivamos
+                botonComida = document.getElementById("botonComida");
+                botonComida.setAttribute("onclick", "crearComida()");
+                botonComida.disabled = true;
+                
+            }
+            
+            // Funcion para llenar la pecera.
+            function Llenar() {
+                
+                // Desactivamos el boton llenar
+                botonLlenar.disabled = true;
+                
+                // Metemos el offset Top en una variable por comodidad
+                var offsetAgua = document.getElementById("agua").offsetTop;
+                
+                // Si el offset es mayor a 30, el agua sube sino, no.
+                if (offsetAgua > 30) {
+                 
+                    // Movemos la capa agua hacia arriba
+                    document.getElementById("agua").style.top = (offsetAgua - 1) + "px";
+                    
+                    // Ponemos un timeout para ir repitiendo la funcion.
+                    var intervaloLlenado = setTimeout('Llenar()', 1);
+                    
+                } else {
+                    
+                    // Una vez que la pecera esta llena activamos el boton de crear peces.
+                    botonPez.disabled = false;
+                    
+                }
+                
+            }
+            
+            
+            // Funcion par crear peces!
+            function crearPez() {
+                
+                // Creamos la nueva capa para el pez
+                var nuevoPez = document.createElement("div");
+                
+                // Metemos al futuro padre en una variable
+                var padre = document.getElementById("agua");
+                
+                // Asignamos clase a la nueva capa
+                nuevoPez.className = "pececito";
+                
+                // Asignamos Id
+                nuevoPez.id = "Pez" + contadorPeces;
+                
+                // Incrementamos el contador
+                contadorPeces++;
+                
+                // Asignamos el onclick
+                nuevoPez.setAttribute("onclick", "seleccionarPez(this)");
+                
+                // Le asignamos un value al pez para guardar la comida que come
+                
+                nuevoPez.value = 0;
+            
+                ///////////////////////////////////////
+                // Empezamos cogiendo un numero aleatorio entre 1 y 4
+                var pezAleatorio = Math.floor(randomRange(1, 4));
+                
+                // Seleccionar una imagen aleatoria con el numero aleatorio anterior
+                nuevoPez.style.backgroundImage = "url(images/fish" + pezAleatorio + ".png)";
+                /////////////////////////////////////// Fin
+                
+                ///////////////////////////////////////
+                // Cogemos la posicion random respecto al top
+                var posicionTop = randomRange(0, 400) + "px";
+                var posicionLeft = randomRange(0, 650) + "px";
+                
+                // Asignamos las posiciones al nuevo pez
+                nuevoPez.style.top = posicionTop;
+                nuevoPez.style.left = posicionLeft;
+                ///////////////////////////////////// Fin
+                
+                // Aqui nace el nuevo pez :D
+                padre.appendChild(nuevoPez);
+                
+                // Activamos el boton de comida
+                botonComida.disabled = false;
+                
+            }
+            
+            
+            // Funcion para crear la comida
+            function crearComida() {
+                
+                // Creamos la capa comida
+                var nuevaComida = document.createElement("div");
+                
+                // Metemos al padre en una variable (comodidad)
+                var padre = document.getElementById("contenedor");
+                
+                // Le damos el nombre de clase
+                nuevaComida.className = "comida";
+                
+                // Le damos la ID a la nueva comida
+                nuevaComida.id = "Comida" + contadorComida;
+                
+                // Incrementamos contador
+                contadorComida++;
+                
+                // Asignamos el onclick
+                
+                nuevaComida.setAttribute("onclick", "seleccionComida(this)");
+                
+                // La posicionamos de izquierda a derecha
+                var posicionLeft = randomRange(0, 675) + "px";
+                nuevaComida.style.left = posicionLeft;
+                nuevaComida.style.top = 0;
+                
+                // Le damos el color aleatorio
+                var r = Math.floor(randomRange(0, 255));
+                var g = Math.floor(randomRange(0, 255));
+                var b = Math.floor(randomRange(0, 255));
+                
+                nuevaComida.style.backgroundColor = "rgb(" + r + "," + g + "," + b + ")";
+                
+                // Se la asignamos al padre
+                padre.appendChild(nuevaComida);
+                
+                // Y hacemos que se mueva hacia abajo
+                mueveComida(nuevaComida.id);
+                
+            }
+            
+            function mueveComida(comidaId) {
+                
+                var comidaActual = document.getElementById(comidaId);
+                
+                var offsetTop = comidaActual.offsetTop;
+                
+                if (offsetTop < 475) {
+                    
+                    comidaActual.style.top = (offsetTop + 1) + "px";
+                    setTimeout("mueveComida('" + comidaId + "')", 1);
+                    
+                } 
+                
+                
+            }
+            
+            // Funcion para seleccionar un pez
+            
+            function seleccionarPez (pezActual) {
+                
+                // Metemos en la variable global SeleccionarPez la id del pez seleciconado
+                pezSeleccion = pezActual.id;
+                
+                // Actualizamos la informacion del Pez en la UI
+                document.getElementById("pez").innerHTML = pezActual.id;
+                document.getElementById("comida").innerHTML = pezActual.value;
+                
+            }
+            
+            
+            // Funcion para la seleccion de la comida
+            function selecionComida (comida) {
+                
+                // Si hemos seleccionado algun pez..
+                if (pezSeleccion != undefined) {
+                    
+                    // Capturamos el pez que teniamos seleccionado
+                    pezActual = document.getElementById(pezSeleccion);
+                    
+                    // Le sumamos una comida al pez
+                    pezActual.value++;
+                    
+                    // Borramos la comida
+                    borrar(this);
+                    
+                    // Actualizamos
+                    document.getElementById("comida").innerHTML = pezActual.value;
+                    
+                    
+                }
+                
+            }
+            
+            
+            
+            
+            // Funcion Random entre un minimo y un maximo
+            function randomRange (min, max) {
+
+                var resultado = (Math.random() * (max - min)) + min;
+
+                return resultado;
+
+            }
+            
+            // Funcion de borrar elementos
+            function borrar(elemento) {
+    
+                elemento.parentNode.removechild(elemento);
+
+            }
+
+            
+        </script>
+    </head>
+    
+    <body>
+        <div id="botones">
+           <button id="botonLlenar">Llenar</button>
+           <button id="botonPeces">Echar Peces</button>
+           <button id="botonComida">Echar Comida</button>
+        </div>
+        <div id="UI">
+            <span id="pez">Pez?</span><br>
+            Comida: <span id="comida"></span>
+        </div>
+        
+		<div id="contenedor">
+		    <div id="agua">
+		        
+		    </div>
+		</div>
+    </body>
+</html>
