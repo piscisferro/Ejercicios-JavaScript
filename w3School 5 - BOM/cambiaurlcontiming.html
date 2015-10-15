@@ -5,22 +5,24 @@
         <title>cambia URL</title>
         
         <script>
-        
-            var cuenta = 5;
             
             window.onload = function () {
                 
                 // Empieza la cuenta atras al pulsar el boton
                 document.getElementById("cambiarurl").onclick = contador;
-                
-                
                     
                 // al cargar escribe en el parrafo la url actual.
                 document.getElementById("urlactual").innerHTML = window.location.href;
                 
             }
             
+            // Segundos cuenta atras
+            var cuenta = 6;
             
+            // Si no esta global morira con la funcion
+            var intervalo;
+            
+            // Funcion contador de cuenta atras
             function  contador() {
              
                 cuenta--;                
@@ -32,11 +34,10 @@
                 
                 document.getElementById("contador").innerHTML = cuenta;
                 
-                var intervalo = setTimeout(contador, 1000);
+                intervalo = setTimeout(contador, 1000);
                 
                 // Para la cuenta atras
-                document.getElementById("stop").onclick = window.clearTimeout(intervalo);
-                
+                document.getElementById("stop").setAttribute("onclick", "clearTimeout(intervalo)");
             }
             
             function cambiar() {
