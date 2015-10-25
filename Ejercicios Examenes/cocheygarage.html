@@ -69,6 +69,17 @@
                 
             }
             
+            #GameOver {
+                
+                position: fixed;
+                margin: auto;
+                top: 10%;
+                left: 20%;
+                visibility: hidden;
+                color: black;
+                font-size: 100px;
+            }
+            
             
         </style>
         
@@ -101,7 +112,7 @@
                 garage = document.getElementById("garage");
                 
                 //Lanzamos el mover horizontal
-                moverHorizontal(coche.id, velocidad);
+                controlCoche(coche.id, velocidad);
                 // Lanzamos el chequeo de colision
                 chequeoDeColision(coche.id);
                 
@@ -123,7 +134,7 @@
             // Funcion para aumentar la velocidad
             function avanzar() {
                 
-                // Creamos la aceleracion, con una velocidad maxima de 2
+                // Creamos la aceleracion, con una velocidad maxima de 3
                 if (velocidad < 3) {
                     velocidad += 1; 
                 
@@ -150,21 +161,21 @@
             // Funcion para subir la puerta
             function subir() {
                 
-                moverVertical(puerta.id, -1);
+                controlPuerta(puerta.id, -1);
                 
             }
             
             // Funcion para subir la puerta
             function bajar() {
                 
-                moverVertical(puerta.id, 1);
+                controlPuerta(puerta.id, 1);
                 
             }
             
             
-            // Funcion para bajar la puerta
-            
-            // Con esta funcion chequearemos la posicion del coche
+            // Con esta funcion chequearemos la posicion del coche y si colisiona
+            // o no con la puerta o la pared del fondo. Esta continuamente chequeando
+            // desde el comienzo
             function chequeoDeColision (cocheId) {
                 
                 // Cogemos el elemento coche y lo metemos en una variable
@@ -178,9 +189,55 @@
                 var posicionCoche = coche.offsetLeft;
                 var posicionPuerta = puerta.offsetLeft;
                 
-                // La formula es: Posicion = "Parte Delantera" + (Anchura - pared del fondo)
+                // Posicion de la pared del fondo: 
+                // La formula es: Posicion = "Parte Delantera" + (Anchura - pared del fondo) con esto tenemos
                 var posicionGarage = garage.offsetLeft + (200 - 5); 
                 
+                // Este if es el intervalo de la colision, basicamente dice que si el largo del coche esta en la posicion
+                // de la puerta y ademas esta está bajada (estara bajada cuando la altura de la puerta sea menor que la altura
+                // del coche ref en controlesPuerta())  
+                if (posicionCoche > (posicionPuerta - 150) && posicionCoche < (posicionPuerta + 14) && estaBajada) {
+                    
+                    // Limpiamos el Timeout del coche para pararlo
+                    clearTimeout(intervaloCoche);
+                    // Limpiamos el Timeout de la puerta para pararla
+                    clearTimeout(intervaloPuerta);
+                    
+                    // Desactivamos los botones bajar y subir de la puerta
+                    document.getElementById('bajar').disabled = true;
+                    document.getElementById('subir').disabled = true;
+                    
+                    // Hacemos aparecer el cartel de Game Over
+                    document.getElementById('GameOver').style.visibility = "visible";
+                    
+                    // Salimos de la funcion para que no siga el Timeout
+                    return;
+                    
+                }
+                
+                // Si la posicion del coche + el largo del coche es mayor que
+                // la posicion del muro del garage, choca
+                if (posicionCoche + 150 > posicionGarage) {
+                    
+                    // Limpiamos el Timeout del coche para pararlo
+                    clearTimeout(intervaloCoche);
+                    // Limpiamos el Timeout de la puerta para pararla
+                    clearTimeout(intervaloPuerta);
+                    
+                    // Desactivamos los botones bajar y subir de la puerta
+                    document.getElementById('bajar').disabled = true;
+                    document.getElementById('subir').disabled = true;
+                    
+                    // Hacemos aparecer el cartel de Game Over
+                    document.getElementById('GameOver').style.visibility = "visible";
+                    
+                    // Salimos de la funcion para que no siga el Timeout
+                    return;
+                    
+                }
+                
+                // TimeOut para volver a la funcion y chequear                
+                setTimeout("chequeoDeColision('" + cocheId + "')", 1);
                 
                 
             }
@@ -188,13 +245,13 @@
             // Funcion para mover un elemento a la izquierda o derecha
             // Si ponemos distancia negativa nos moveremos hacia la izquierda
             // Si ponemos distancia positiva nos moveremos hacia la derecha
-            function moverHorizontal (elementoId, distancia) {
+            function controlCoche (elementoId, distancia) {
                 
                 var elemento = document.getElementById(elementoId);
                 
                 elemento.style.left = (elemento.offsetLeft + distancia) + "px";
                 
-                intervaloCoche = setTimeout("moverHorizontal('" + elemento.id + "', " + velocidad + ")", 8);
+                intervaloCoche = setTimeout("controlCoche('" + elemento.id + "', " + velocidad + ")", 8);
                 
             }
 
@@ -202,7 +259,7 @@
             // Funcion para mover un elemento hacia arriba o hacia abajo
             // Si ponemos distancia negativa nos moveremos hacia arriba
             // Si ponemos distancia positiva nos moveremos hacia abajo
-            function moverVertical (elementoId, distancia) {
+            function controlPuerta (elementoId, distancia) {
                 
                 var elemento = document.getElementById(elementoId);
                 
@@ -213,16 +270,21 @@
                     estaBajada = false;
                 } else {
                     estaBajada = true;
+                    
                 }
                 
                 // Ponemos los limites a la puerta
                 if (elemento.offsetTop > 0 && distancia < 0) {
                     
-                    intervaloPuerta = setTimeout("moverVertical('" + elemento.id + "', " + distancia + ")", 1);
+                    intervaloPuerta = setTimeout("controlPuerta('" + elemento.id + "', " + distancia + ")", 1);
+                    document.getElementById('bajar').disabled = false;
+                    document.getElementById('subir').disabled = true;
                     
                 } else if (elemento.offsetTop < 100 && distancia > 0) {
                     
-                    intervaloPuerta = setTimeout("moverVertical('" + elemento.id + "', " + distancia + ")", 1);
+                    intervaloPuerta = setTimeout("controlPuerta('" + elemento.id + "', " + distancia + ")", 1);
+                    document.getElementById('bajar').disabled = true;
+                    document.getElementById('subir').disabled = false;
                     
                 }
                 
@@ -237,6 +299,8 @@
         </script>
     </head>
     <body>
+        <div id="GameOver">Game Over</div>
+       
         <div id="contenedor">
             <div id="coche"></div>
 		    <div id="puerta"></div>
