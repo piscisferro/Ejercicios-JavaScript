@@ -1,0 +1,361 @@
+<!--         Ejercicio Examen2.            ---
+---- Creado por Juan Jose Fernandez Romero -->
+
+
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Examen2_JuanJose</title>
+        <style>
+            
+            #workspace {
+                
+                background-color: black;
+                width: 800px;
+                height: 600px;
+                position: relative;
+                margin: 0 auto;
+                
+            }
+            
+            p {
+                
+                text-align: center;
+                
+            }
+            
+            #gamespace {
+                
+                width: 100%;
+                height: 100%;
+                position: absolute;
+                background-color: black;
+                z-index: 1;
+            }
+            
+            #comenzar {
+                
+                display: block;
+                width: auto;
+                margin: 15px auto;
+                
+            }
+            
+            #GameOver {
+                
+                margin: 250px 125px;
+                visibility: hidden;
+                position: absolute;
+                font-size: 100px;
+                font-weight: bold;
+                color: white;
+                z-index: 3;
+            }
+            
+            #bebe {
+                
+                width: 40px;
+                height: 40px;
+                background-image: url(images/baby.png);
+                background-size: cover;
+                position: absolute;
+                
+            } 
+            
+            
+            #mosquito {
+                
+                width: 40px;
+                height: 40px;
+                background-image: url(images/fly.png);
+                background-size: cover;
+                position: absolute;
+                
+            }
+            
+            .deadMosquito {
+                
+                width: 40px;
+                height: 40px;
+                background-image: url(images/deadmosquito.png);
+                background-size: cover;
+                position: absolute;
+                
+            }
+            
+            
+        
+        </style>
+        <script>
+            
+            // Se inicializan variables globales
+            var contadorNivel = 0; // Contador de mosquitos muertos/niveles
+            var velocidadMs = 50; // Velocidad en milisegundos del TimeOut
+            var mosquitoTimeout; // Variable para limpiar luego el movimiento del mosquito
+            
+            // Al cargar la pagina
+            window.onload = function() {
+                
+                // Le damos al boton Comenzar su propiedad onclick
+                document.getElementById("comenzar").setAttribute("onclick", "comenzar()");
+                
+            }
+            
+            
+            // Funcion para jugar a ser Dios y que crea al bebe y lanza al primer mosquito
+            function comenzar() {
+                
+                // Primero desactivamos el boton comenzar para que no se pueda volver a pulsar
+                document.getElementById("comenzar").disabled = true;
+                
+                // Despues lanzamos la funcion reset para reinicializarlo todo
+                reset();
+                
+                // Asignamos la capa padre a la variable padre (comodidad)
+                var padre = document.getElementById("gamespace");
+                
+                // Comenzamos juganso a ser Dios y creando al bebe.
+                var bebe = document.createElement("div");
+                
+                // Le damos ID
+                bebe.id = "bebe";
+                
+                // Le damos una posicion aleatoria
+                bebe.style.top = randomRange(0, 560) + "px";
+                bebe.style.left = randomRange(0, 760) + "px";
+                
+                // Hacemos que el bebe nazca :')
+                padre.appendChild(bebe);
+                
+                // Lanzamos la funcion crear mosquito
+                crearMosquito();
+                
+            }
+            
+            
+            // Funcion reinicio para reiniciar todo cuando comenzemos el juego
+            function reset() {
+                
+                // Despues borramos todos lo que haya en el Workspace (en caso de que lo hubiera)
+                borrarTodo("gamespace");
+                
+                // Reiniciamos puntuacion
+                contadorNivel = 0;
+                document.getElementById("puntuacion").innerHTML = contadorNivel;
+                
+                // Reiniciamos la velocidad a 50
+                velocidadMs = 50;
+                
+                // Volvemos a poner el cartel Game Over invisible
+                document.getElementById("GameOver").style.visibility = "hidden";
+                
+            }
+            
+            
+            // Funcion para crear un ejercito de mosquitos y dominar el mundo
+            function crearMosquito() {
+                
+                // Metemos a la capa padre en una variable (comodidad)
+                var padre = document.getElementById("gamespace");
+                
+                // Creamos la capa mosquito
+                var mosquito = document.createElement("div");
+                
+                // Le damos ID
+                mosquito.id = "mosquito";
+                
+                // Le damos posicion aleatoria
+                mosquito.style.top = randomRange(0, 560) + "px";
+                mosquito.style.left = randomRange(0, 760) + "px";
+                
+                // Le damos el atributo onclick
+                mosquito.setAttribute("onclick", "aplastado(this)");
+                
+                // Jugamos a ser Dios y creamos al mosquito
+                padre.appendChild(mosquito);
+                
+                // Una vez creado lanzamos al mosquito hacia su victima
+                seekAndDestroy(mosquito.id); 
+                
+            }
+            
+            
+            
+            // Funcion que provoca que el mosquito se dé de baja por Accidente Laboral
+            function aplastado(mosquito) {
+                
+                // Asignamos la capa padre
+                var padre = document.getElementById("gamespace");
+                
+                // Creamos la capa del mosquito muerto
+                var deadMosquito = document.createElement("div");
+                
+                // Le damos clase
+                deadMosquito.className = "deadMosquito";
+                
+                // Lo posicionamos
+                deadMosquito.style.top = mosquito.offsetTop + "px";
+                deadMosquito.style.left = mosquito.offsetLeft + "px";
+                
+                // Hacemos que el mosquito sea aplastado finalmente
+                padre.appendChild(deadMosquito);
+                
+                // Una vez aplastado aumentamos la velocidad, ¡esta vez el bebe no escapara!
+                velocidadMs /= (contadorNivel + 2);
+                
+                // Aumentamos el nivel
+                contadorNivel++;
+                
+                // Actualizamos el valor en pantalla
+                document.getElementById("puntuacion").innerHTML = contadorNivel;
+                
+                // reposicionamos al mosquito
+                mosquito.style.top = randomRange(0, 560) + "px";
+                mosquito.style.left = randomRange(0, 760) + "px";
+                
+            }
+            
+            
+            
+            // Funcion para darle un objetivo al mosquito al cual destruir.
+            function seekAndDestroy(mosquitoId) {
+                
+                // Localizamos al mosquito y lo guardamos en una variable
+                var mosquito = document.getElementById(mosquitoId);
+                
+                // Guardamos a la victima del mosquito en una variable
+                var victima = document.getElementById("bebe");
+                
+                // Inicializamos las variables direccionX y direccionY
+                var direccionX = 0;
+                var direccionY = 0;
+                
+                //Comenzamos el calculo de la posicion de la victima para que el mosquito se mueva
+                // hacia ella, si el mosquito esta situado a la izquierda
+                if (victima.offsetLeft > mosquito.offsetLeft) {
+                    
+                    // Lo llevaremos a la direccion derecha
+                    direccionX = 1;
+                    
+                } else if (victima.offsetLeft < mosquito.offsetLeft) {
+                    
+                    // Si el mosquito esta a la derecha, lo llevaremos a la direccion izquierda
+                    direccionX = -1;
+                    
+                } else {
+                    
+                    // Si el mosquito esta en la misma posicionX que la victima, no se movera
+                    direccionX = 0;
+                    
+                } // Fin del calculo de la direccion horizontal
+                
+                
+                // Calculo vertical
+                // Si el mosquito esta por encima de la victima
+                if (victima.offsetTop > mosquito.offsetTop) {
+                    
+                    // Lo llevaremos hacia abajo
+                    direccionY = 1;
+                    
+                } else if (victima.offsetTop < mosquito.offsetTop) {
+                    
+                    // Si el mosquito esta debajo de la victima lo llevamos hacia arriba
+                    direccionY = -1;
+                    
+                } else {
+                    
+                    // Si el mosquito esta en la misma posicionY que la victima, no se movera
+                    direccionY = 0;
+                    
+                } // Fin del calculo de la direccion Vertical
+                
+                
+                
+                // Hacemos que el mosquito se mueva en horizontal
+                mosquito.style.left = (mosquito.offsetLeft + direccionX) + "px";
+                // Y en vertical
+                mosquito.style.top = (mosquito.offsetTop + direccionY) + "px";
+                
+                // Si direccionX y direccionY los dos son 0, significa que el mosquito ha llegado
+                // a su victima y la ha destruido.
+                if (direccionX == 0 && direccionY == 0) {
+                    // Lanzamos GameOver
+                    gameOver();
+                    // Salimos de la funcion para no llegar al TimeOut y limpiarlo
+                    return;
+                    
+                }
+                
+                // Lanzamos el Timeout par a volver a lanzar la funcion
+                mosquitoTimeout = setTimeout("seekAndDestroy('" + mosquito.id + "')", velocidadMs); 
+                
+            }
+            
+            
+            
+            // Funcion GameOver, se lanza cuando los mosquitos han destruido toda nueva progenie humana
+            function gameOver() {
+                
+                // Volvemos a Activar el boton Comenzar
+                document.getElementById("comenzar").disabled = false;
+                
+                // Destruimos al bebe
+                var bebe = document.getElementById("bebe");
+                bebe.parentNode.removeChild(bebe);
+                
+                // Hacemos visible el letrero Game Over
+                document.getElementById("GameOver").style.visibility = "visible";
+                
+                // Le quitamos al mosquito la capacidad de ser aplastado
+                document.getElementById("mosquito").onclick="";
+                
+            }
+            
+            
+            
+            
+            // Funcion Random entre un minimo y un maximo
+            function randomRange(min, max) {
+                
+                /** Si se quiere numeros aleatorios con decimales ****
+                var resultado = (Math.random() * (max - min)) + min; 
+                **/
+                
+                // Para numeros aleatorios enteros
+                var resultado = Math.round((Math.random() * (max - min)) + min);
+                
+                return resultado;
+
+            }
+            
+            // Funcion para borrar todos los elementos de un contenedor
+            function borrarTodo (contenedorId) {
+
+                // Buscamos el contenedor donde se encuentra todo lo que queremos borrar
+                var contenedor = document.getElementById(contenedorId);
+
+                // Mientras el contenedor tenga nodos hijos, los borrara.
+                while (contenedor.firstChild) {
+                    contenedor.removeChild(contenedor.firstChild);
+                }
+
+            }
+
+            
+        
+        </script>
+    </head>
+    
+    <body>
+		<div id="contenedor">
+            <p>Mosquitos Aplastados: <span id="puntuacion">0</span></p>
+            <button id="comenzar">¡Comenzar!</button>
+		    <div id="workspace">
+		        <div id="GameOver">Game Over!</div>
+		        <div id="gamespace"></div>
+		    </div>
+		
+		</div>
+    </body>
+</html>
